@@ -4,13 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "ts-node-dev --respawn --transpileOnly ./app/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "tsc --watch"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/jsonfile": "^5.0.0",
+    "@types/node": "^12.7.2",
+    "jsonfile": "^5.0.0",
     "local-devices": "^2.0.0",
     "macaddress": "^0.2.9",
-    "ping": "^0.2.2"
+    "ping": "^0.2.2",
+    "ts-node-dev": "^1.0.0-pre.41",
+    "tslint": "^5.18.0",
+    "typescript": "^3.5.3",
+    "typescript-tslint-plugin": "^0.5.4"
   }
 }

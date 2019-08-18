@@ -1,0 +1,9 @@
+{
+    "rules": {
+        "no-unreachable": true,
+        "semicolon": [
+            true,
+            "always"
+        ]
+    }
+}

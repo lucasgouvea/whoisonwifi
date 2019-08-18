@@ -6,9 +6,10 @@ let file = 0;
 let init = () => {
   find().then(initialDevices => {
     devices = initialDevices;
-    setInterval(() => {
-      routine();
-    }, 5000);
+    console.log('inital' + initialDevices);
+    /*     setInterval(() => {
+          routine();
+        }, 5000); */
   });
 };
 
