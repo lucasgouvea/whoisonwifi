@@ -2,27 +2,27 @@ import Device from "./model/Device";
 
 class DeviceManager {
 
-
     devices: Device[];
-    excludedDevices: Device[];
     find: any;
 
-    static readonly FISCHER = "a8:7d:12:55:40:3d";
-    static readonly ROCA = "98:39:8e:8b:d8:6d";
-    static readonly BERRO = "a8:16:d0:dd:1f:13";
-    static readonly VINI = "9c:f4:8e:4e:fc:d";
+    static readonly knownDevices = [
+        new Device("a8:7d:12:55:40:3d", "Fischer"),
+        new Device("98:39:8e:8b:d8:6d", "Roca"),
+        new Device("a8:16:d0:dd:1f:13", "Berro"),
+        new Device("9c:f4:8e:4e:fc:d3", "Vini"),
+    ];
+    static readonly excludedDevices = [
+        new Device("70:9e:29:7e:95:97", "PS4"),
+        new Device("10:02:b5:56:68:e1", "Fischer_Note"),
+        new Device("c4:84:66:9b:a6:6c", "Fischer_Ipad"),
+        new Device("30:5a:3a:0e:1a:0b", "ASUS_Computer_1"),
+        new Device("b0:6e:bf:d6:84:fc", "ASUS_Computer_2"),
+        new Device("d0:50:99:a1:4c:f2", "ASRock_INC")
+    ];
 
     constructor(find: Function) {
         this.devices = [];
         this.find = find;
-        this.excludedDevices = [
-            new Device("70:9e:29:7e:95:97", "PS4"),
-            new Device("10:02:b5:56:68:e1", "Fischer_Note"),
-            new Device("c4:84:66:9b:a6:6c", "Fischer_Ipad"),
-            new Device("30:5a:3a:0e:1a:0b", "ASUS_Computer_1"),
-            new Device("b0:6e:bf:d6:84:fc", "ASUS_Computer_2"),
-            new Device("d0:50:99:a1:4c:f2", "ASRock_INC")
-        ];
     }
 
     addDevice(device: Device): void {
@@ -55,18 +55,31 @@ class DeviceManager {
     async checkForNewDevice(): Promise<Device | undefined> {
         /* Gotta mock this */
         /* let devices = await this.find(); */
-        const { sortDevices, findMock } = this;
+        const { sortDevices, findMock, isExcludedDevice } = this;
         return new Promise((resolve) => {
             setTimeout(() => {
                 const devices = sortDevices(findMock());
                 if (devices.length > this.devices.length) {
                     const newDevice = this.getNewDevice(devices);
-                    resolve(newDevice);
+                    if (isExcludedDevice(newDevice)) {
+                        resolve(undefined);
+                    } else {
+                        resolve(newDevice);
+                    }
                 } else {
                     resolve(undefined);
                 }
             }, 500);
         });
+    }
+
+    isExcludedDevice(device: Device): boolean {
+        DeviceManager.excludedDevices.forEach(excludedDev => {
+            if (excludedDev.mac === device.mac) {
+                return true;
+            }
+        });
+        return false;
     }
 
     async checkForOutgoingDevice(): Promise<Device | undefined> {
